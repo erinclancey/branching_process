@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPgl.R
 \name{getPgl}
 \alias{getPgl}
-\title{getPgl calculates pgl\link{g} for all g from 1 to gMax}
+\title{getPgl calculates \code{pgl[g]} for all g from 1 to gMax}
 \usage{
 getPgl(gMax, R, k)
 }
@@ -14,7 +14,7 @@ getPgl(gMax, R, k)
 \item{k}{dispersion parameter.}
 }
 \description{
-pgl\link{g} is the probability that one initial case leads to an outbreak lasting
+\code{pgl[g]} is the probability that one initial case leads to an outbreak lasting
 less than g generations of transmission.
 }
 \author{

@@ -1,6 +1,6 @@
-#' getPgl calculates pgl[g] for all g from 1 to gMax
+#' getPgl calculates `pgl[g]` for all g from 1 to gMax
 #'
-#' pgl[g] is the probability that one initial case leads to an outbreak lasting
+#' `pgl[g]` is the probability that one initial case leads to an outbreak lasting
 #' less than g generations of transmission.
 #'
 #' @param gMax maximum number of generations.
