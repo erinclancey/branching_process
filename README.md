@@ -1,4 +1,9 @@
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/EpiForeSITE/branching_process/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EpiForeSITE/branching_process/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 ## Branching process outbreak simulator
 
 Quantifies risk posed by individual importers of a novel transmissible
