@@ -2,4 +2,5 @@
 
 export(getPgl)
 export(p)
+export(qAny)
 importFrom(stats,uniroot)
