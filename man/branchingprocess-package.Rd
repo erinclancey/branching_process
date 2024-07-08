@@ -4,9 +4,23 @@
 \name{branchingprocess-package}
 \alias{branchingprocess}
 \alias{branchingprocess-package}
-\title{branchingprocess: What the Package Does (One Line, Title Case)}
+\title{Infectious disease outbreak quantification using branching processes}
 \description{
-What the package does (one paragraph).
+This package provides functions that quantify infectious disease outbreaks
+using a branching process, a stochastic process in which each individual in
+generation n produces a random number of individuals in generation n+1,
+continuing for some number of generations or until there are no individuals
+remaining (stochastic extinction).
+}
+\details{
+The random number of next-generation individuals produced by each individual
+is drawn from the offspring distribution, a discrete probability distribution
+with non-negative range. To model infectious disease outbreaks, it is common
+to use a negative binomial offspring distribution, parameterized by the mean
+\code{R} and dispersion parameter \code{k}. This parameterization is equivalent to
+using mu = R and size = k in R's "NegBinomial", e.g. dnbinom(x, mu=R, size=k)
+would give the density,  i.e. the probability of exactly x transmissions from
+one individual.
 }
 \author{
 \strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
