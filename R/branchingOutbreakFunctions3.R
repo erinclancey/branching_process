@@ -6,33 +6,33 @@
 pExtinct <- function(R,k) ifelse(R > 1, uniroot(function(q) q - (1+R/k*(1-q))^(-k), c(0,0.999999), tol=1e-7)$root, 1)
 
 # qg is the probability that n initial cases lead to an outbreak that ends after
-# exactly g generations of transmission AND has exactly j (> n+g-1) total cases 
+# exactly g generations of transmission AND has exactly j (> n+g-1) total cases
 
-qg <- function(g,n,j,R,k){
-  
+pFinalSizeAndGen <- function(g,n,j,R,k){
+
   if(g==1){
-    out <- p(n,j-n,R,k)*p(j-n,0,R,k)
+    out <- pNextGen(n,j-n,R,k)*pNextGen(j-n,0,R,k)
   }else if(g==2){
-    out <- sum(p(n,1:(j-n-1),R,k) * p(1:(j-n-1),(j-n-1):1,R,k) * p((j-n-1):1,0,R,k))
+    out <- sum(pNextGen(n,1:(j-n-1),R,k) * pNextGen(1:(j-n-1),(j-n-1):1,R,k) * pNextGen((j-n-1):1,0,R,k))
   }else{
-    
+
     rs1 <- (j-n-g+1):1
     x1 <- rep(1:(j-n-g+1),choose(rs1+g-3,g-2))
-    
+
     x <- matrix(0,length(x1),g-1)
     x[,1] <- x1
-    
-    pProd <- p(n,x1,R,k)
-    
+
+    pProd <- pNextGen(n,x1,R,k)
+
     rsA <- rs1
     for(i in 2:(g-1)){
       rsB <- sequence(rsA,rsA,-1)
       x[,i] <- rep(sequence(rsA),choose(rsB+g-2-i,g-1-i))
-      pProd <- pProd * p(x[,i-1],x[,i],R,k)
+      pProd <- pProd * pNextGen(x[,i-1],x[,i],R,k)
       rsA <- rsB
     }
     xLast <- j-n-rowSums(x)
-    pProd <- pProd * p(x[,g-1],xLast,R,k) * p(xLast,0,R,k)
+    pProd <- pProd * pNextGen(x[,g-1],xLast,R,k) * pNextGen(xLast,0,R,k)
     out <- sum(pProd)
   }
   out
@@ -41,103 +41,105 @@ qg <- function(g,n,j,R,k){
 # pg is the probability that n initial cases lead to an outbreak that lasts at least g generations
 # of transmission AND has exactly j (> n+g-1) total cases after generation g
 
-pg <- function(g,n,j,R,k){
-  
+pSizeAtGen <- function(g,n,j,R,k){
+
   if(g==1){
-    out <- p(n,j-n,R,k)
+    out <- pNextGen(n,j-n,R,k)
   }else if(g==2){
-    out <- sum(p(n,1:(j-n-1),R,k) * p(1:(j-n-1),(j-n-1):1,R,k))
+    out <- sum(pNextGen(n,1:(j-n-1),R,k) * pNextGen(1:(j-n-1),(j-n-1):1,R,k))
   }else{
-    
+
     rs1 <- (j-n-g+1):1
     x1 <- rep(1:(j-n-g+1),choose(rs1+g-3,g-2))
-    
+
     x <- matrix(0,length(x1),g-1)
     x[,1] <- x1
-    
-    pProd <- p(n,x1,R,k)
-    
+
+    pProd <- pNextGen(n,x1,R,k)
+
     rsA <- rs1
     for(i in 2:(g-1)){
       rsB <- sequence(rsA,rsA,-1)
       x[,i] <- rep(sequence(rsA),choose(rsB+g-2-i,g-1-i))
-      pProd <- pProd * p(x[,i-1],x[,i],R,k)
+      pProd <- pProd * pNextGen(x[,i-1],x[,i],R,k)
       rsA <- rsB
     }
     xLast <- j-n-rowSums(x)
-    pProd <- pProd * p(x[,g-1],xLast,R,k)
+    pProd <- pProd * pNextGen(x[,g-1],xLast,R,k)
     out <- sum(pProd)
   }
   out
 }
+
 
 
 # The following are new versions of some of the above formulas, for a model in which (R,k) = (R0,k0) for the
 # initial case(s) ONLY, while any cases in subsequent generations transmit according to (R,k) = (Rc,kc)
 
-qAnySwitch1 <- function(n,j,R0,k0,Rc,kc) ifelse(j==n, p(n,0,R0,k0), sum(p(n,1:(j-n),R0,k0) * qAny(1:(j-n),j-n,Rc,kc)))
+pFinalSizeSwitch1 <- function(n,j,R0,k0,Rc,kc)
+  ifelse(j==n, pNextGen(n,0,R0,k0), sum(pNextGen(n,1:(j-n),R0,k0) * pFinalSize(1:(j-n),j-n,Rc,kc)))
 
-getPglSwitch1 <- function(gMax,R0,k0,Rc,kc){
+pGenSwitch1 <- function(gMax,R0,k0,Rc,kc){
   pgl <- rep(0,gMax)
   pgl[1] <- (1+R0/k0)^(-k0)
-  if(gMax > 1) for(g in 2:gMax) pgl[g] <- (1+Rc/kc*(1-pgl[g-1]))^(-kc)	
+  if(gMax > 1) for(g in 2:gMax) pgl[g] <- (1+Rc/kc*(1-pgl[g-1]))^(-kc)
   pgl
 }
 
-qgSwitch1 <- function(g,n,j,R0,k0,Rc,kc){
-  
+pFinalSizeAndGenSwitch1 <- function(g,n,j,R0,k0,Rc,kc){
+
   if(g==1){
-    out <- p(n,j-n,R0,k0)*p(j-n,0,Rc,kc)
+    out <- pNextGen(n,j-n,R0,k0)*pNextGen(j-n,0,Rc,kc)
   }else if(g==2){
-    out <- sum(p(n,1:(j-n-1),R0,k0) * p(1:(j-n-1),(j-n-1):1,Rc,kc) * p((j-n-1):1,0,Rc,kc))
+    out <- sum(pNextGen(n,1:(j-n-1),R0,k0) * pNextGen(1:(j-n-1),(j-n-1):1,Rc,kc) * pNextGen((j-n-1):1,0,Rc,kc))
   }else{
     rs1 <- (j-n-g+1):1
     x1 <- rep(1:(j-n-g+1),choose(rs1+g-3,g-2))
-    
+
     x <- matrix(0,length(x1),g-1)
     x[,1] <- x1
-    
-    pProd <- p(n,x1,R0,k0)
-    
+
+    pProd <-pNextGen(n,x1,R0,k0)
+
     rsA <- rs1
     for(i in 2:(g-1)){
       rsB <- sequence(rsA,rsA,-1)
       x[,i] <- rep(sequence(rsA),choose(rsB+g-2-i,g-1-i))
-      pProd <- pProd * p(x[,i-1],x[,i],Rc,kc)
+      pProd <- pProd *pNextGen(x[,i-1],x[,i],Rc,kc)
       rsA <- rsB
     }
     xLast <- j-n-rowSums(x)
-    pProd <- pProd * p(x[,g-1],xLast,Rc,kc) * p(xLast,0,Rc,kc)
+    pProd <- pProd *pNextGen(x[,g-1],xLast,Rc,kc) *pNextGen(xLast,0,Rc,kc)
     out <- sum(pProd)
   }
   out
 }
 
-pgSwitch1 <- function(g,n,j,R0,k0,Rc,kc){
-  
+pSizeAtGenSwitch1 <- function(g,n,j,R0,k0,Rc,kc){
+
   if(g==1){
-    out <- p(n,j-n,R0,k0)
+    out <-pNextGen(n,j-n,R0,k0)
   }else if(g==2){
-    out <- sum(p(n,1:(j-n-1),R0,k0) * p(1:(j-n-1),(j-n-1):1,Rc,kc))
+    out <- sum(pNextGen(n,1:(j-n-1),R0,k0) *pNextGen(1:(j-n-1),(j-n-1):1,Rc,kc))
   }else{
-    
+
     rs1 <- (j-n-g+1):1
     x1 <- rep(1:(j-n-g+1),choose(rs1+g-3,g-2))
-    
+
     x <- matrix(0,length(x1),g-1)
     x[,1] <- x1
-    
-    pProd <- p(n,x1,R0,k0)
-    
+
+    pProd <-pNextGen(n,x1,R0,k0)
+
     rsA <- rs1
     for(i in 2:(g-1)){
       rsB <- sequence(rsA,rsA,-1)
       x[,i] <- rep(sequence(rsA),choose(rsB+g-2-i,g-1-i))
-      pProd <- pProd * p(x[,i-1],x[,i],Rc,kc)
+      pProd <- pProd *pNextGen(x[,i-1],x[,i],Rc,kc)
       rsA <- rsB
     }
     xLast <- j-n-rowSums(x)
-    pProd <- pProd * p(x[,g-1],xLast,Rc,kc)
+    pProd <- pProd *pNextGen(x[,g-1],xLast,Rc,kc)
     out <- sum(pProd)
   }
   out

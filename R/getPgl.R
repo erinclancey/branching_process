@@ -8,7 +8,7 @@
 #' @param k dispersion parameter.
 #' @author Damon Toth
 #' @export
-getPgl <- function(gMax,R,k) {
+pGen <- function(gMax,R,k){
   pgl <- rep(0,gMax)
   pgl[1] <- (1+R/k)^(-k)
   if(gMax > 1) for(g in 2:gMax) pgl[g] <- (1+R/k*(1-pgl[g-1]))^(-k)
