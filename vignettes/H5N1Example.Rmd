@@ -34,7 +34,7 @@ The argument `n` to `pFinalSize` is the initial number of cases at the start of 
 ```{r}
 pClusterSizes(R=1.5,k=1)*100
 ```
-If the reproduction number R = 1.5, and the dispersion parameter k = 1, the function calculates a 40% chance that an outbreak of total size 1 (no tranmsission) would occur, a 9.6% chance of exactly size 2, a 0.12% chance of exactly size 10, and less than 0.01% chance of outbreak of exactly size 50. 
+If the reproduction number $R = 1.5$, and the dispersion parameter k = 1, the function calculates a 40% chance that an outbreak of total size 1 (no tranmsission) would occur, a 9.6% chance of exactly size 2, a 0.12% chance of exactly size 10, and less than 0.01% chance of outbreak of exactly size 50. 
 
 Next we write a function `logLikData()` to calculate the log likelihood of observing 25, 3, 1, and 1 outbreak(s) of those four sizes, for given values of R and k:
 
