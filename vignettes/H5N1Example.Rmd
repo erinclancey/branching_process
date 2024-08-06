@@ -1,0 +1,60 @@
+---
+title: "H5N1 Example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{H5N1 Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+author: Damon Toth
+date: 2024-08-06
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+This is a vignette to demonstrate potential use of functions in the R package `branchingprocess`.
+
+```{r setup}
+library(branchingprocess)
+```
+
+Say there are 30 H5N1 human infections from zoonotic spillover events, i.e. 30 instances of human infection from exposure to animals. In 25 of the spillover events, no subsequent human-to-human occurred. In 3 of the spillover events, exactly one human-to-human transmission occurred from the initially infected human with no further transmission (final size of 2 infections). In one spillover event, there was an outbreak of final size 10 infections, and another spillover event produced an outbreak of final size 50 infections. What values of R and k would best characterize this set of observations?
+
+We can make use of the `pFinalSize()` function to create a (log) likelihood function for this dataset of outbreak clusters. First, we write a function called `pClusterSizes()` that calculates the probabilities of the four different final sizes observed (1, 2, 10, and 50) for given values of R and k:
+
+```{r}
+pClusterSizes <- function(R,k) pFinalSize(n=1, j=c(1,2,20,50), R=R, k=k)
+```
+
+The argument `n` to `pFinalSize` is the initial number of cases at the start of an outbreak, here set to `n=1` because each of the observed H5N1 outbreak started from one initial infection (the spillover event). The argument `j` is the final size of the outbreak, here set as a vector of the four unique final sizes observed.
+
+```{r}
+pClusterSizes(R=1.5,k=1)*100
+```
+If the reproduction number R = 1.5, and the dispersion parameter k = 1, the function calculates a 40% chance that an outbreak of total size 1 (no tranmsission) would occur, a 9.6% chance of exactly size 2, a 0.12% chance of exactly size 10, and less than 0.01% chance of outbreak of exactly size 50. 
+
+Next we write a function `logLikData()` to calculate the log likelihood of observing 25, 3, 1, and 1 outbreak(s) of those four sizes, for given values of R and k:
+
+```{r}
+logLikData <- function(R,k) sum(c(25,3,1,1)*log(pClusterSizes(R,k)))
+```
+What is the likelihood of observing exactly these 30 outbreak sizes after 30 spillover events, for our test values of R and k?
+```{r}
+exp(logLikData(1.5,1))
+```
+
+Can we do better for different choices of R and k? We can use `optim` to locate the maximum likelihood solution for R and k by optimizing the log likelihood:
+
+```{r}
+optim(f = function(x) ifelse(all(x>0), -logLikData(x[1],x[2]), Inf), par = c(R=1,k=1))$par
+```
+
+The maximum likelihood estimate is R = 0.7, k = 0.08. For these values, what is the probability that a singles spillover event will result in an outbreak of 100 or more cases?
+
+```{r}
+1-sum(pFinalSize(1,1:99,0.7,0.08))
+```
+The model estimates that there would be about 0.5% or roughly 1-in-200 chance of a 100-or-more case outbreak after a future spillover event.
