@@ -1,12 +1,14 @@
 Package: branchingprocess
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Branching Process Outbreak Simulator
+Version: 0.0-9
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Damon", "Toth", , "damon.toth@hsc.utah.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7393-4814"))
+Description: Quantifies risk posed by individual importers of a novel transmissible pathogen to a generic population, with intervention effects. Scenarios(s) Modeled: Novel introduction of transmissible pathogen by infected traveler, by accidentally infected laboratory worker, or similar scenario; intervention scenarios for improved detection of initial case and for delayed mitigation after ongoing outbreak is detected.
 License: MIT + file LICENSE
 Encoding: UTF-8
+URL: https://github.com/EpiForeSITE/branching_process,
+    https://epiforesite.github.io/branching_process/
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 

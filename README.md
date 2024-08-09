@@ -2,6 +2,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/EpiForeSITE/branching_process/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EpiForeSITE/branching_process/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/EpiForeSITE/branching_process/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/EpiForeSITE/branching_process/actions/workflows/pkgdown.yaml)
 <!-- badges: end -->
 
 ## Branching process outbreak simulator
@@ -31,3 +32,22 @@ To install the package, you can use the following code:
 ``` r
 devtools::install_github("EpiForeSITE/branching_process")
 ```
+
+## To cite the package in publications
+
+To cite the package in publications, please use:
+
+    ## To cite package 'branchingprocess' in publications use:
+    ## 
+    ##   Toth D (????). _Branching Process Outbreak Simulator_. R package
+    ##   version 0.0-9, <https://epiforesite.github.io/branching_process/>.
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Manual{,
+    ##     heather = {To cite branchingprocess in publications use:},
+    ##     title = {Branching Process Outbreak Simulator},
+    ##     author = {Damon Toth},
+    ##     note = {R package version 0.0-9},
+    ##     url = {https://epiforesite.github.io/branching_process/},
+    ##   }
