@@ -24,6 +24,14 @@ What are the chances that a new spillover event will lead to an ever larger outb
 ```{r setup}
 library(branchingprocess)
 ```
+A branching process is a stochastic (random) process in which each individual in generation $n$ produces a random number of individuals, or "offspring" in generation $n+1$, continuing for some number of generations or until there are no individuals remaining. If no individuals remain, i.e. every individual in the last generation produced no offspring, we call this extinction.
+
+The random number of next-generation individuals produced by each individual is drawn from the offspring distribution, a discrete probability distribution with non-negative range. To model infectious disease outbreaks, it is common to use a negative binomial offspring distribution, parameterized by the mean $R$ and dispersion parameter $k$. 
+
+This parameterization is equivalent to using `mu = R` and `size = k` in R's `NegBinomial`, e.g. `dnbinom(x, mu=R, size=k)` would give the density, i.e. the probability of exactly $x$ transmissions from one individual.
+
+
+
 Say there are 30 H5N1 human infections from zoonotic spillover events, i.e. 30 instances of human infection from exposure to animals. In 25 of the spillover events, no subsequent human-to-human occurred. In 3 of the spillover events, exactly one human-to-human transmission occurred from the initially infected human with no further transmission (final size of 2 infections). In one spillover event, there was an outbreak of final size 10 infections, and another spillover event produced an outbreak of final size 50 infections. What values of R and k would best characterize this set of observations?
 
 We can make use of the `pFinalSize()` function to create a (log) likelihood function for this dataset of outbreak clusters. First, we write a function called `pClusterSizes()` that calculates the probabilities of the four different final sizes observed (1, 2, 10, and 50) for given values of R and k:
