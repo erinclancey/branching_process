@@ -6,7 +6,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 author: Damon Toth
-date: 2024-08-06
+date: 2024-08-26
 ---
 
 ```{r, include = FALSE}
@@ -15,12 +15,15 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-This is a vignette to demonstrate potential use of functions in the R package `branchingprocess`.
+This is a vignette to demonstrate potential use of functions in the R package `branchingprocess` to quantify outbreak risk posed by an infectious disease with emerging transmission potential.
+
+Some emerging infectious organisms have the ability to transmit from person to person, but the risk of the organism causing an outbreak that infects many individuals over multiple generations of transmission is unclear. Perhaps a pathogen exists primarily in non-human animal reservoirs but occasionally spills over to humans, and those humans may or may not transmit to one or two family members. Sometimes, a spillover event leads to an outbreak infecting dozens of people over a few generations of transmission before fizzling out.
+
+What are the chances that a new spillover event will lead to an ever larger outbreak than what has been seen so far? Is it possible that an extremely large outbreak has a reasonable chance of happening, and has been avoided so far only by random chance? The functions in this package can help quantify answers to these questions.
 
 ```{r setup}
 library(branchingprocess)
 ```
-
 Say there are 30 H5N1 human infections from zoonotic spillover events, i.e. 30 instances of human infection from exposure to animals. In 25 of the spillover events, no subsequent human-to-human occurred. In 3 of the spillover events, exactly one human-to-human transmission occurred from the initially infected human with no further transmission (final size of 2 infections). In one spillover event, there was an outbreak of final size 10 infections, and another spillover event produced an outbreak of final size 50 infections. What values of R and k would best characterize this set of observations?
 
 We can make use of the `pFinalSize()` function to create a (log) likelihood function for this dataset of outbreak clusters. First, we write a function called `pClusterSizes()` that calculates the probabilities of the four different final sizes observed (1, 2, 10, and 50) for given values of R and k:
