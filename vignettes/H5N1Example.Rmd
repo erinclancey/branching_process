@@ -28,9 +28,44 @@ A branching process is a stochastic (random) process in which each individual in
 
 The random number of next-generation individuals produced by each individual is drawn from the offspring distribution, a discrete probability distribution with non-negative range. To model infectious disease outbreaks, it is common to use a negative binomial offspring distribution, parameterized by the mean $R$ and dispersion parameter $k$. 
 
-This parameterization is equivalent to using `mu = R` and `size = k` in R's `NegBinomial`, e.g. `dnbinom(x, mu=R, size=k)` would give the density, i.e. the probability of exactly $x$ transmissions from one individual.
+$R$ is the reproduction number, the expected (mean) number of transmissions from an infected individual. For a fixed value of $R$, a lower dispersion $k$ gives a higher variance of the negative binomial distribution: variance = $R + R^2/k$. Infectious diseases with a lower value of $k$ exhibit a higher rate of "superspreading" events, in which a single individual produces a number of transmission substantially higher than the mean. 
 
+This parameterization of the negative binomial distribution is equivalent to using `mu = R` and `size = k` in the native `NegBinomial`, e.g. `dnbinom(x, mu=R, size=k)` would give the density, i.e. the probability of exactly $x$ transmissions from one individual.
 
+The function `pNextGen(x,y,R,k)` extends the `dnbinom()` function to more than one potentially transmitting individual. I.e. it calculates the probability that `x` individuals in one generation transmit to a total of `y` individuals in the next generation, where each of the `x` individuals independently transmits according the negative binomial distribution parameterized by `R` and `k`.
+
+Example: With $R=0.8$ and $k=0.1$, and with 2 individuals infected, what is the probability that those 2 individuals will produce a total of exactly 5 transmissions in the next generation?
+
+```{r}
+pNextGen(x=2, y=5, R=0.8, k=0.1)
+```
+
+There is about a 2.1% chance that the next generation will consist of exactly 5 infected individuals. Note that `pNextGen()` does not explicitly calculate the component probabilities for each of the two potential transmitters (e.g., one transmitting to 2 and other transmitting to 3, etc.). It is an efficient calculation for the probability that the total number of transmissions is 5.
+
+We can observe some effects of the dispersion parameter $k$ by comparing part of the distributon for two examples:
+
+```{r}
+pNextGen(x=2, y=c(0,1,5,10), R=0.8, k=10)*100
+pNextGen(x=2, y=c(0,1,5,10), R=0.8, k=0.1)*100
+```
+The results show the probability (times 100, or % chance) that two individuals transmit to a total of exactly 0, 1, 5, or 10 when $R = 0.8$, for two values of $k$. 
+
+With a high value of $k=10$, there is only a 21% chance that no transmissions occur, but the probability of a higher numbers of transmissions drops quickly: there is only a 0.002% or one-in-500 chance that 10 transmissions occur. 
+
+With a low value of $k=0.1$, we see some very different results despite the fact that the reproduction number is the same. From the perspective of public health, a lower value of $k$ is a mixture of good and bad news. The good news is that the probability of no transmissions is about 3 times as high 64%. But the bad news is that if transmissions do occur, there is a substantially higher chance of a high number, e.g. a 0.8% chance of 10 total transmissions from the first two individuals.
+
+Of course, if the initial cases produce transmissions in the next generation, the outbreak may not end there. Those transmissions produce potentially infectious individuals in the second generation who can subsequently transmit to produce a third generation, and so on. If $R$ does not exceed 1, it is mathematically provable that the outbreak will eventual go extinct, i.e. there will be eventually be a generation of infected individuals who all produce zero transmissions. But how big could an outbreak get before that happens?
+
+A common approach to analyzing the distribution of stochastic outbreak sizes is to run repeated simulations of outbreaks that randomize transmissions from each simulated individual and repeat, e.g. within a `while` loop, until no further transmissions can occur. However, there are mathematical formulae derived in the literature that can efficiently calculate the distribution of final outbreak sizes with no simulation needed. 
+
+The function `pFinalSize()` makes use of such a formula, for the case of the same negative binomial offspring distribution applied independently to each infected individual. For example,
+
+```{r}
+pFinalSize(n=2, j=12, R=0.8, k=0.1)
+```
+This calculated the probability that, with $R=0.8$ and $k=0.1$ applied to every case, 2 initially infected individuals produce an outbreak that ends with a final size of 12, i.e. the 2 initial cases plus 10 subsequent cases, over any possible number of transmission generations.
+
+Now let's look at an example of how this function could be applied to study data from actual observed outbreak sizes. The H5N1 strain of influenza is currently of concern because of outbreaks among animals that sometimes cause spillover to humans. If these spillover events start leading to some substantial outbreaks involving human-to-human transmission, how could we use `pFinalSize()` to study these data?
 
 Say there are 30 H5N1 human infections from zoonotic spillover events, i.e. 30 instances of human infection from exposure to animals. In 25 of the spillover events, no subsequent human-to-human occurred. In 3 of the spillover events, exactly one human-to-human transmission occurred from the initially infected human with no further transmission (final size of 2 infections). In one spillover event, there was an outbreak of final size 10 infections, and another spillover event produced an outbreak of final size 50 infections. What values of R and k would best characterize this set of observations?
 
