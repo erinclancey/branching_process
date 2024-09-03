@@ -113,11 +113,15 @@ The maximum likelihood estimate is R = 0.7, k = 0.08.
 
 ## Risk assessment
 
-With estimates based on past outbreaks in hand, what can we say about may happen after future spillover events? What are the chances that we have not yet seen the "worst case scenario" and that even larger outbreaks are coming? 
+With estimates based on past outbreaks in hand, what can we say about what may happen after future spillover events? What are the chances that we have not yet seen a "worst case scenario" and that even larger outbreaks are coming? 
 
-For example, from the estimates above with R = 0.7, k = 0.08, what is the probability that a singles spillover event will result in an outbreak of 100 or more cases?
+For example, from the estimates above with R = 0.7, k = 0.08, what is the probability that a singles spillover event will result in an outbreak of 100 or more cases, i.e. more than twice as big as the previous worst outbreak?
 
 ```{r}
 1-sum(pFinalSize(1,1:99,0.7,0.08))
 ```
 The model estimates that there would be about 0.5% or roughly 1-in-200 chance of a 100-or-more case outbreak after a future spillover event.
+
+This type of result is known as an "exceedance" probability. There is not a separate function for calculating exceedance, we only have a function to calculate the probability of an exact final size. Hence, the above function call to `pFinalSize` calculates the probability of a final size exactly equal to 1, 2, ... 99, and one minus the sum of these probabilities is the exceedance probability required.
+
+
