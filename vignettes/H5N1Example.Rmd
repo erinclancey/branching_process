@@ -124,4 +124,16 @@ The model estimates that there would be about 0.5% or roughly 1-in-200 chance of
 
 This type of result is known as an "exceedance" probability. There is not a separate function for calculating exceedance, we only have a function to calculate the probability of an exact final size. Hence, the above function call to `pFinalSize` calculates the probability of a final size exactly equal to 1, 2, ... 99, and one minus the sum of these probabilities is the exceedance probability required.
 
+## Control reproduction number
+
+Once an outbreak is underway after an initial (e.g. spillover) event has taken place, the affected individuals and public health officials may take action to reduce the chances of further transmission. Efforts to reduce transmission may be especially intense after a symptomatic individual tests positive for an emerging, high-risk pathogen. To model that effect, the package provides functions to calculate the final size distribution for a branching process in which the offspring distribution parameters (e.g. the reproduction number) changes after a given number of transmission generations following the initial infection.
+
+The function `pFinalSizeSwitchOne(n,j,R0,k0,Rc,kc)` calculates the probability that `n` initial cases lead to an outbreak of final size `j` given that the initial cases transmit with a negative binomial offspring distribution with parameters `R = R0` (the basic reproduction number) and `k = k0`, and any/all subsequent cases transmit with a negative binomial offspring distribution with parameters `R = Rc` (the control reprodcution number) and `k = kc`.
+
+For example, 
+```{r}
+fs1to10 <- pFinalSizeSwitch1(n=1, j=1:10, R0=2, k0=0.1, Rc=0.8, kc=0.1)
+c(fs1to10,1-fs1to10)
+```
+provides information on a distribution of final sizes when one initial case transmits with R0 = 2, but any subsequent cases transmit with Rc = 0.8, with high variability (k0=kc=0.1).
 
