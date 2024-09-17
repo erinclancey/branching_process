@@ -22,8 +22,16 @@ using mu = R and size = k in R's "NegBinomial", e.g. dnbinom(x, mu=R, size=k)
 would give the density,  i.e. the probability of exactly x transmissions from
 one individual.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/EpiForeSITE/branching_process}
+  \item \url{https://epiforesite.github.io/branching_process/}
+}
+
+}
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Damon Toth \email{damon.toth@hsc.utah.edu} (\href{https://orcid.org/0000-0001-7393-4814}{ORCID})
 
 }
 \keyword{internal}
