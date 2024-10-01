@@ -132,8 +132,9 @@ The function `pFinalSizeSwitchOne(n,j,R0,k0,Rc,kc)` calculates the probability t
 
 For example, 
 ```{r}
-fs1to10 <- pFinalSizeSwitch1(n=1, j=1:10, R0=2, k0=0.1, Rc=0.8, kc=0.1)
-c(fs1to10,1-fs1to10)
+fs1to10 <- Vectorize(pFinalSizeSwitch1)(n=1, j=1:10, R0=2, k0=0.1, Rc=0.8, kc=0.1)
+names(fs1to10) <- paste0("size",1:10)
+c(fs1to10,sizeover10 = 1-sum(fs1to10))
 ```
 provides information on a distribution of final sizes when one initial case transmits with R0 = 2, but any subsequent cases transmit with Rc = 0.8, with high variability (k0=kc=0.1).
 
