@@ -10,4 +10,4 @@
 #' # 0 to 15 transmissions in the next generation?
 #' pNextGen(5, 0:15, R=0.2, k=0.1)
 #' @export
-pNextGen <- function(x,y,R,k) exp(lgamma(k*x+y)-lgamma(k*x)-lgamma(y+1)+y*log(R/k)-(k*x+y)*log(1+R/k))
+pNextGenSize <- function(x,y,R,k) exp(lgamma(k*x+y)-lgamma(k*x)-lgamma(y+1)+y*log(R/k)-(k*x+y)*log(1+R/k))
