@@ -2,6 +2,7 @@
 
 export(pFinalSize)
 export(pFinalSizeAndGen)
+export(pFinalSizeAndGenSwitch1)
 export(pFinalSizeSwitch1)
 export(pGen)
 export(pNextGen)
