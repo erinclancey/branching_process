@@ -12,7 +12,7 @@ pFinalSizeAndGen <- function(g,n,j,R,k){
   if(g==1){
     out <- pNextGen(n,j-n,R,k)*pNextGen(j-n,0,R,k)
   }else if(g==2){
-    out <- sum(pNextGen(n,1:(j-n-1),R,k) * pNextGen(1:(j-n-1),(j-n-1):1,R,k) * pNextGen((j-n-1):1,0,R,k))
+    out <- sum(pNextGenSize(n,1:(j-n-1),R,k) * pNextGenSize(1:(j-n-1),(j-n-1):1,R,k) * pNextGenSize((j-n-1):1,0,R,k))
   }else{
     
     rs1 <- (j-n-g+1):1
@@ -21,17 +21,17 @@ pFinalSizeAndGen <- function(g,n,j,R,k){
     x <- matrix(0,length(x1),g-1)
     x[,1] <- x1
     
-    pProd <- pNextGen(n,x1,R,k)
+    pProd <- pNextGenSize(n,x1,R,k)
     
     rsA <- rs1
     for(i in 2:(g-1)){
       rsB <- sequence(rsA,rsA,-1)
       x[,i] <- rep(sequence(rsA),choose(rsB+g-2-i,g-1-i))
-      pProd <- pProd * pNextGen(x[,i-1],x[,i],R,k)
+      pProd <- pProd * pNextGenSize(x[,i-1],x[,i],R,k)
       rsA <- rsB
     }
     xLast <- j-n-rowSums(x)
-    pProd <- pProd * pNextGen(x[,g-1],xLast,R,k) * pNextGen(xLast,0,R,k)
+    pProd <- pProd * pNextGenSize(x[,g-1],xLast,R,k) * pNextGenSize(xLast,0,R,k)
     out <- sum(pProd)
   }
   out

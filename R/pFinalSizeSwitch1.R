@@ -15,5 +15,5 @@
 #'
 #' @export
 pFinalSizeSwitch1 <- function(n,j,R0,k0,Rc,kc){
-  ifelse(j==n, pNextGen(n,0,R0,k0), sum(pNextGen(n,1:(j-n),R0,k0) * pFinalSize(1:(j-n),j-n,Rc,kc)))
+  ifelse(j==n, pNextGenSize(n,0,R0,k0), sum(pNextGenSize(n,1:(j-n),R0,k0) * pFinalSize(1:(j-n),j-n,Rc,kc)))
 }

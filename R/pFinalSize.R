@@ -15,4 +15,4 @@
 #' pFinalSize(5, 5:20, R=0.2, k=0.1)
 #'
 #' @export
-pFinalSize <- function(n,j,R,k) pNextGen(j,j-n,R,k)*n/j
+pFinalSize <- function(n,j,R,k) pNextGenSize(j,j-n,R,k)*n/j

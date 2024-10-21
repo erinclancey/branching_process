@@ -37,27 +37,27 @@ $R$ is the reproduction number, the expected (mean) number of transmissions from
 
 This parameterization of the negative binomial distribution is equivalent to using `mu = R` and `size = k` in the native `NegBinomial`, e.g. `dnbinom(x, mu=R, size=k)` would give the density, i.e. the probability of exactly $x$ transmissions from one individual.
 
-The function `pNextGen(x,y,R,k)` extends the `dnbinom()` function to more than one potentially transmitting individual. I.e. it calculates the probability that `x` individuals in one generation transmit to a total of `y` individuals in the next generation, where each of the `x` individuals independently transmits according the negative binomial distribution parameterized by `R` and `k`.
+The function `pNextGenSize(x,y,R,k)` extends the `dnbinom()` function to more than one potentially transmitting individual. I.e. it calculates the probability that `x` individuals in one generation transmit to a total of `y` individuals in the next generation, where each of the `x` individuals independently transmits according the negative binomial distribution parameterized by `R` and `k`.
 
 Example: With $R=0.8$ and $k=0.1$, and with 2 individuals infected, what is the probability that those 2 individuals will produce a total of exactly 5 transmissions in the next generation?
 
 ```{r}
-pNextGen(x=2, y=5, R=0.8, k=0.1)
+pNextGenSize(x=2, y=5, R=0.8, k=0.1)
 ```
 
-There is about a 2.1% chance that the next generation will consist of exactly 5 infected individuals. Note that `pNextGen()` does not explicitly calculate the component probabilities for each of the two potential transmitters (e.g., one transmitting to 2 and other transmitting to 3, etc.). It is an efficient calculation for the probability that the total number of transmissions is 5.
+There is about a 2.1% chance that the next generation will consist of exactly 5 infected individuals. Note that `pNextGenSize()` does not explicitly calculate the component probabilities for each of the two potential transmitters (e.g., one transmitting to 2 and other transmitting to 3, etc.). It is an efficient calculation for the probability that the total number of transmissions is 5.
 
 ## Dispersion effects
 
 We can observe some effects of the dispersion parameter $k$ by comparing part of the distribution for two examples:
 
 ```{r}
-pNextGen(x=2, y=c(0,1,5,10), R=0.8, k=10)*100
-pNextGen(x=2, y=c(0,1,5,10), R=0.8, k=0.1)*100
+pNextGenSize(x=2, y=c(0,1,5,10), R=0.8, k=10)*100
+pNextGenSize(x=2, y=c(0,1,5,10), R=0.8, k=0.1)*100
 ```
 The results show the probability (times 100, or % chance) that two individuals transmit to a total of exactly 0, 1, 5, or 10 when $R = 0.8$, for two values of $k$. 
 
-With a high value of $k=10$, there is only a 21% chance that no transmissions occur, but the probability of a higher numbers of transmissions drops quickly: there is only a 0.002% or apporximately one-in-500 chance that 10 transmissions occur. 
+With a high value of $k=10$, there is only a 21% chance that no transmissions occur, but the probability of a higher numbers of transmissions drops quickly: there is only a 0.002% or approximately one-in-500 chance that 10 transmissions occur. 
 
 With a low value of $k=0.1$, we see some very different results despite the fact that the reproduction number is the same. From the perspective of public health, a lower value of $k$ is a mixture of good and bad news. The good news is that the probability of no transmissions (the best case scenario) has risen to 64%, about 3 times higher than the result for $k=10$. The bad news is that if transmissions do occur, there is a substantially higher chance that the number of transmissions will be high; for example there is a 0.8% chance of 10 total transmissions from the first two individuals.
 
