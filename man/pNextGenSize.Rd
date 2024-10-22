@@ -21,5 +21,5 @@ Probability of y total transmission directly from x independent infected individ
 \examples{
 # With 5 individuals in this generation, what is the probability of
 # 0 to 15 transmissions in the next generation?
-pNextGen(5, 0:15, R=0.2, k=0.1)
+pNextGenSize(5, 0:15, R=0.2, k=0.1)
 }
