@@ -1,0 +1,41 @@
+#' Probability that n initial cases lead to an outbreak that lasts at least g generations
+#' of transmission AND has exactly j total cases after generation g
+#'
+#' @param g number of generations of transmission
+#' @param n number of initial cases
+#' @param j total size of outbreak after generation g
+#' @param R0 basic reproduction number: mean of negative binomial offspring distribution from generation one
+#' @param k0 dispersion parameter of negative binomial offspring distribution from generation one
+#' @param Rc control reproduction number: mean of negative binomial offspring distribution from generation two plus
+#' @param kc dispersion parameter of negative binomial offspring distribution from generation two plus
+#' @author Damon Toth
+#' @export
+pSizeAtGenSwitch1 <- function(g,n,j,R0,k0,Rc,kc){
+  
+  if(g==1){
+    out <-pNextGen(n,j-n,R0,k0)
+  }else if(g==2){
+    out <- sum(pNextGen(n,1:(j-n-1),R0,k0) *pNextGen(1:(j-n-1),(j-n-1):1,Rc,kc))
+  }else{
+    
+    rs1 <- (j-n-g+1):1
+    x1 <- rep(1:(j-n-g+1),choose(rs1+g-3,g-2))
+    
+    x <- matrix(0,length(x1),g-1)
+    x[,1] <- x1
+    
+    pProd <-pNextGen(n,x1,R0,k0)
+    
+    rsA <- rs1
+    for(i in 2:(g-1)){
+      rsB <- sequence(rsA,rsA,-1)
+      x[,i] <- rep(sequence(rsA),choose(rsB+g-2-i,g-1-i))
+      pProd <- pProd *pNextGen(x[,i-1],x[,i],Rc,kc)
+      rsA <- rsB
+    }
+    xLast <- j-n-rowSums(x)
+    pProd <- pProd *pNextGen(x[,g-1],xLast,Rc,kc)
+    out <- sum(pProd)
+  }
+  out
+}
