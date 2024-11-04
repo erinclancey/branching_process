@@ -128,7 +128,16 @@ The resulting estimate of $R_0>1$ suggests that an uncontrolled outbreak might b
 
 ## Final size and number of generations
 
-There is sometimes more information from an outbreak cluster than just the final size. For example, the number of generations of transmission over which the outbreak occurred might also be known. The `pFinalSize` function accounts for all possibilities for the number of generations. For example, an outbreak of size 10 could have occurred in as few as one transmission generation (the initial case transmitting directly to 9 others, who each transmit to none), or as many as nine generations (every case transmitting to exactly one other, until the tenth case fails to transmit). To break down the possibilities, we also provide the `pFinalSizeAndGen(g,n,j,R,k)` function, which calculates the joint probability that `n` initial cases leads to an outbreak of final size `j` over `g` transmission generations, when the offspring distribution is negative binomial with mean `R` and disperson `k`.
+There could be more information from an outbreak cluster than just the final size. For example, the number of generations of transmission over which the outbreak occurred might also be known. The `pFinalSize` function accounts for all possibilities for the number of generations. For example, an outbreak of size 10 could have occurred in as few as one transmission generation (the initial case transmitting directly to 9 others, who each transmit to none), or as many as nine generations (every case transmitting to exactly one other, until the tenth case fails to transmit). To break down the possibilities, we also provide the `pFinalSizeAndGen(g,n,j,R,k)` function, which calculates the joint probability that `n` initial cases leads to an outbreak of final size `j` over `g` transmission generations, when the offspring distribution is negative binomial with mean `R` and dispersion `k`.
+
+The following gives the probability of each of the 9 possibilities for the joint probability of an outbreak of final size 10 and 1 to 9 total transmission generations, for R = 0.8 and k = 0.07.
+
+```{r}
+finalSize10 <- Vectorize(pFinalSizeAndGen,'g')(g=1:9,n=1,j=10,R=0.8,k=0.07)
+finalSize10
+c(sum(finalSize10), pFinalSize(n=1,j=10,R=0.8,k=0.07))
+```
+The second output above demonstrates that the 9 probabilities sum to the total probability of an outbreak of final size 10 calculated by `pFinalSize`.
 
 
 ## Risk assessment
