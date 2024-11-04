@@ -126,6 +126,11 @@ optim(f = function(x) ifelse(all(x>0), -logLikDataSwitch1(x[1],x[2]), Inf), par 
 ```
 The resulting estimate of $R_0>1$ suggests that an uncontrolled outbreak might be possible in the absence of any control measures like the ones that were implented after the 5 spillover events that resulted in human-to-human transmission.
 
+## Final size and number of generations
+
+There is sometimes more information from an outbreak cluster than just the final size. For example, the number of generations of transmission over which the outbreak occurred might also be known. The `pFinalSize` function accounts for all possibilities for the number of generations. For example, an outbreak of size 10 could have occurred in as few as one transmission generation (the initial case transmitting directly to 9 others, who each transmit to none), or as many as nine generations (every case transmitting to exactly one other, until the tenth case fails to transmit). To break down the possibilities, we also provide the `pFinalSizeAndGen(g,n,j,R,k)` function, which calculates the joint probability that `n` initial cases leads to an outbreak of final size `j` over `g` transmission generations, when the offspring distribution is negative binomial with mean `R` and disperson `k`.
+
+
 ## Risk assessment
 
 With estimates based on past outbreaks in hand, what can we say about what may happen after future spillover events? What are the chances that we have not yet seen a "worst case scenario" and that even larger outbreaks are coming? 
