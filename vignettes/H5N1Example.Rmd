@@ -111,11 +111,26 @@ optim(f = function(x) ifelse(all(x>0), -logLikData(x[1],x[2]), Inf), par = c(R=1
 
 The maximum likelihood estimate is R = 0.7, k = 0.08.
 
+## Control reproduction number
+
+Once an outbreak is underway after an initial (e.g. spillover) event has taken place, the affected individuals and public health officials may take action to reduce the chances of further transmission. Efforts to reduce transmission may be especially intense after a symptomatic individual tests positive for an emerging, high-risk pathogen. To model that effect, the package provides functions to calculate the final size distribution for a branching process in which the offspring distribution parameters (e.g. the reproduction number) changes after a given number of transmission generations following the initial infection.
+
+The function `pFinalSizeSwitchOne(n,j,R0,k0,Rc,kc)` calculates the probability that `n` initial cases lead to an outbreak of final size `j` given that the initial cases transmit with a negative binomial offspring distribution with parameters `R = R0` (the basic reproduction number) and `k = k0`, and any/all subsequent cases transmit with a negative binomial offspring distribution with parameters `R = Rc` (the control reprodcution number) and `k = kc`.
+
+In the above example of data from 30 spillover events, there were only 5 events resulting in transmission from the initial case. Thus, there were only 5 outbreaks providing data that might be used to estimate Rc and kc - not enough to provide robust estimates. However, suppose experts judged that control measures enacted after identifying a spillover event reduced transmission potential of subsequent cases by half. Assuming, say, $R_c=R_0/2$ and $k_c=k_0$, how would our estimates of $R_0$ and $k_0$ change?
+
+```{r}
+pClusterSizesSwitch1 <- function(R0,k0) Vectorize(pFinalSizeSwitch1)(n=1, j=c(1,2,20,50), R0=R0, k0=k0, Rc=R0/2, kc=k0)
+logLikDataSwitch1 <- function(R0,k0) sum(c(25,3,1,1)*log(pClusterSizesSwitch1(R0,k0)))
+optim(f = function(x) ifelse(all(x>0), -logLikDataSwitch1(x[1],x[2]), Inf), par = c(R0=1,k0=1))$par
+```
+The resulting estimate of $R_0>1$ suggests that an uncontrolled outbreak might be possible in the absence of any control measures like the ones that were implented after the 5 spillover events that resulted in human-to-human transmission.
+
 ## Risk assessment
 
 With estimates based on past outbreaks in hand, what can we say about what may happen after future spillover events? What are the chances that we have not yet seen a "worst case scenario" and that even larger outbreaks are coming? 
 
-For example, from the estimates above with R = 0.7, k = 0.08, what is the probability that a singles spillover event will result in an outbreak of 100 or more cases, i.e. more than twice as big as the previous worst outbreak?
+For example, from the estimates above with R = 0.7, k = 0.08 applied to all cases, what is the probability that a singles spillover event will result in an outbreak of 100 or more cases, i.e. more than twice as big as the previous worst outbreak?
 
 ```{r}
 1-sum(pFinalSize(1,1:99,0.7,0.08))
@@ -124,17 +139,13 @@ The model estimates that there would be about 0.5% or roughly 1-in-200 chance of
 
 This type of result is known as an "exceedance" probability. There is not a separate function for calculating exceedance, we only have a function to calculate the probability of an exact final size. Hence, the above function call to `pFinalSize` calculates the probability of a final size exactly equal to 1, 2, ... 99, and one minus the sum of these probabilities is the exceedance probability required.
 
-## Control reproduction number
+How does this estimate change for the result from the second model that found $R_0$ = 1.08 and $k_0$ = 0.06, under the assumption of a control reproductive number $R_c = R_0/2$ and $k_c=k_0$?
 
-Once an outbreak is underway after an initial (e.g. spillover) event has taken place, the affected individuals and public health officials may take action to reduce the chances of further transmission. Efforts to reduce transmission may be especially intense after a symptomatic individual tests positive for an emerging, high-risk pathogen. To model that effect, the package provides functions to calculate the final size distribution for a branching process in which the offspring distribution parameters (e.g. the reproduction number) changes after a given number of transmission generations following the initial infection.
-
-The function `pFinalSizeSwitchOne(n,j,R0,k0,Rc,kc)` calculates the probability that `n` initial cases lead to an outbreak of final size `j` given that the initial cases transmit with a negative binomial offspring distribution with parameters `R = R0` (the basic reproduction number) and `k = k0`, and any/all subsequent cases transmit with a negative binomial offspring distribution with parameters `R = Rc` (the control reprodcution number) and `k = kc`.
-
-For example, 
 ```{r}
-fs1to10 <- Vectorize(pFinalSizeSwitch1)(n=1, j=1:10, R0=2, k0=0.1, Rc=0.8, kc=0.1)
-names(fs1to10) <- paste0("size",1:10)
-c(fs1to10,sizeover10 = 1-sum(fs1to10))
+1-sum(Vectorize(pFinalSizeSwitch1)(1,1:99,R0=1.08,k0=0.06,Rc=0.54,kc=0.06))
 ```
-provides information on a distribution of final sizes when one initial case transmits with R0 = 2, but any subsequent cases transmit with Rc = 0.8, with high variability (k0=kc=0.1).
+The result is a slightly lower 0.4% estimated chance of a 100-or-more person outbreak. But what if the $R_0$ = 1.08 $k_0$ = 0.06 result applied to every case, i.e. no control measures were enacted for subsequent outbreaks?
 
+```{r}
+1-sum(pFinalSize(1,1:99,R=1.08,k=0.06))
+```
