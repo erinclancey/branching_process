@@ -11,7 +11,9 @@
 #' @export
 pFinalSizeAndGenSwitch1 <- function(g,n,j,R0,k0,Rc,kc){
   
-  if(g==1){
+  if(g==0){
+    out <- pNextGenSize(n,0,R0,k0)
+  }else if(g==1){
     out <- pNextGenSize(n,j-n,R0,k0)*pNextGenSize(j-n,0,Rc,kc)
   }else if(g==2){
     out <- sum(pNextGenSize(n,1:(j-n-1),R0,k0) * pNextGenSize(1:(j-n-1),(j-n-1):1,Rc,kc) * pNextGenSize((j-n-1):1,0,Rc,kc))

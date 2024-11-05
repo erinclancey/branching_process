@@ -146,6 +146,17 @@ pClusterSizeAndGen <- function(R,k) Vectorize(pFinalSizeAndGen)(g=c(0,1,3,4),n=1
 logLikDataGen <- function(R,k) sum(c(25,3,1,1)*log(pClusterSizeAndGen(R,k)))
 optim(f = function(x) ifelse(all(x>0), -logLikDataGen(x[1],x[2]), Inf), par = c(R=1,k=1))$par
 ```
+In this example, the generation data did not substantially alter our estimates.
+
+We also provide the function `pClusterSizeAndGenSwitch1(g,n,j,R0,k0,Rc,kc)`, which caculates the same joint size & generation probability for the model with a control reproduction number after the first transmission generation.
+
+What happens if we try to estimate three parameters simultaneously: $R_0$, $R_c$, and $k=k_0=k_c$:
+
+```{r}
+pClusterSizeAndGenControl <- function(R0,Rc,k) Vectorize(pFinalSizeAndGenSwitch1)(g=c(0,1,3,4),n=1, j=c(1,2,20,50), R0=R0, k0=k, Rc=Rc, kc=k)
+logLikDataGenControl <- function(R0,Rc,k) sum(c(25,3,1,1)*log(pClusterSizeAndGenControl(R0,Rc,k)))
+optim(f = function(x) ifelse(all(x>0), -logLikDataGenControl(x[1],x[2],x[3]), Inf), par = c(R0=1,Rc=1,k=1))$par
+```
 
 ## Risk assessment
 
