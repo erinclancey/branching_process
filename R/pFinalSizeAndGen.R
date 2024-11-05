@@ -9,7 +9,9 @@
 #' @export
 pFinalSizeAndGen <- function(g,n,j,R,k){
   
-  if(g==1){
+  if(g==0){
+    out <- pNextGenSize(n,0,R,k)
+  }else if(g==1){
     out <- pNextGenSize(n,j-n,R,k)*pNextGenSize(j-n,0,R,k)
   }else if(g==2){
     out <- sum(pNextGenSize(n,1:(j-n-1),R,k) * pNextGenSize(1:(j-n-1),(j-n-1):1,R,k) * pNextGenSize((j-n-1):1,0,R,k))
