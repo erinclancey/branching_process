@@ -209,3 +209,14 @@ We also provide `pGenSwitch1(gMax,R0,k0,Rc,kc)`, which calculates the same proba
 pGenSwitch1(gMax=10,R0=1.08,k0=0.06,Rc=0.54,kc=0.06)
 ```
 While this model did not produce a substantially different final size risk compared to the previous one in the example above, it does produce a different duration risk: the risk of a 10-or-more generation outbreak is an order of magnitude lower at 0.02%.
+
+## Outbreak size before extinction
+
+We provide another set of functions that can be used to analyze an ongoing outbreak prior to extinguishing, i.e. before it has reached final size. The functions `pSizeAtGen(g,n,j,R,k)` and `pSizeAtGenSwitch1(g,n,j,R0,k0,Rc,kc)` calculate the probability that `n` initial cases lead to an outbreak that lasts at least `g` generations of transmission AND has exactly `j` total cases after generation `g`.
+
+In the H5N1 data analysis example, these functions could be used to include data from an ongoing outbreak that may not yet be extinguished. For example, a spillover even that produced an outbreak with 10 cases (so far) after 2 generations of transmission:
+
+```{r}
+pSizeAtGen(g=2,n=1,j=10,R=0.7,k=0.08)
+pSizeAtGenSwitch1(g=2,n=1,j=10,R0=1.08,k0=0.06,Rc=0.54,kc=0.06)
+```
