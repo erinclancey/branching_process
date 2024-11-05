@@ -162,6 +162,8 @@ optim(f = function(x) ifelse(all(x>0), -logLikDataGenControl(x[1],x[2],x[3]), In
 
 With estimates based on past outbreaks in hand, what can we say about what may happen after future spillover events? What are the chances that we have not yet seen a "worst case scenario" and that even larger outbreaks are coming? 
 
+#Exceedance probability
+
 For example, from the estimates above with R = 0.7, k = 0.08 applied to all cases, what is the probability that a singles spillover event will result in an outbreak of 100 or more cases, i.e. more than twice as big as the previous worst outbreak?
 
 ```{r}
@@ -181,3 +183,13 @@ The result is a slightly lower 0.4% estimated chance of a 100-or-more person out
 ```{r}
 1-sum(pFinalSize(1,1:99,R=1.08,k=0.06))
 ```
+The chance of a large outbreak rises substantially to over 2%. With $R$ being over the supercritical threshold of 1, that 2% chance includes the risk of an outbreak that grows indefinitely, addressed in the next sub-section.
+
+#Extinction probability and escape risk
+
+We provide the function `pExtinct(R,k)`, which calculates the probability that an outbreak will eventually go extinct with a negative binomial offspring distribution parameterized by mean `R` and dispersion `k`. Then one minus this probability is the "escape" probability, i.e. the risk that an outbreak will grow indefinitely until something acts to reduce the reproduction number, such as depletion of susceptible individuals in the population. When $R\leq 1$, the extinction probability is 1, but if $R>1$ the probability depends on both R and k. From the example above:
+
+```{r}
+1-pExtinct(R=1.08,k=0.06)
+```
+Interestingly, despite the fact that $R>1$, the escape probability is less than 1%. This suggests that seeing a large number of spillover events that all lead to extinguished outbreaks does not necessarily mean that the pathogen poses no risk of an extremely large outbreak.
