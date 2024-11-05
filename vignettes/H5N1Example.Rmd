@@ -162,7 +162,7 @@ optim(f = function(x) ifelse(all(x>0), -logLikDataGenControl(x[1],x[2],x[3]), In
 
 With estimates based on past outbreaks in hand, what can we say about what may happen after future spillover events? What are the chances that we have not yet seen a "worst case scenario" and that even larger outbreaks are coming? 
 
-#Exceedance probability
+### Exceedance probability
 
 For example, from the estimates above with R = 0.7, k = 0.08 applied to all cases, what is the probability that a singles spillover event will result in an outbreak of 100 or more cases, i.e. more than twice as big as the previous worst outbreak?
 
@@ -185,7 +185,7 @@ The result is a slightly lower 0.4% estimated chance of a 100-or-more person out
 ```
 The chance of a large outbreak rises substantially to over 2%. With $R$ being over the supercritical threshold of 1, that 2% chance includes the risk of an outbreak that grows indefinitely, addressed in the next sub-section.
 
-#Extinction probability and escape risk
+### Extinction probability and escape risk
 
 We provide the function `pExtinct(R,k)`, which calculates the probability that an outbreak will eventually go extinct with a negative binomial offspring distribution parameterized by mean `R` and dispersion `k`. Then one minus this probability is the "escape" probability, i.e. the risk that an outbreak will grow indefinitely until something acts to reduce the reproduction number, such as depletion of susceptible individuals in the population. When $R\leq 1$, the extinction probability is 1, but if $R>1$ the probability depends on both R and k. From the example above:
 
@@ -193,3 +193,19 @@ We provide the function `pExtinct(R,k)`, which calculates the probability that a
 1-pExtinct(R=1.08,k=0.06)
 ```
 Interestingly, despite the fact that $R>1$, the escape probability is less than 1%. This suggests that seeing a large number of spillover events that all lead to extinguished outbreaks does not necessarily mean that the pathogen poses no risk of an extremely large outbreak.
+
+### Risk of outbreak duration
+
+While this branching process model does not include an explicit time component, it does contain a measure of outbreak duration as quantified by the number of transmission generations that occur before the outbreak is extinguished. We provide the function `pGen(gMax,R,k)`, which calculates, for a single initial case and negative binomial offspring distribution parameterized by mean `R` and dispersion `k`, the probability that the an outbreak produces less than g generations of transmission for g = 1 to `gMax`.
+
+```{r}
+pGen(gMax=10,R=0.7,k=0.08)
+```
+The output is vector of probabilities of length `gMax` - in this example we can see there is a 99.8% of the outbreak lasting less than 10 generations of transmission, or a 0.2% risk of an outbreak lasting 10 generations of transmission or more.
+
+We also provide `pGenSwitch1(gMax,R0,k0,Rc,kc)`, which calculates the same probabilities for the model with a control reproduction number.
+
+```{r}
+pGenSwitch1(gMax=10,R0=1.08,k0=0.06,Rc=0.54,kc=0.06)
+```
+While this model did not produce a substantially different final size risk compared to the previous one in the example above, it does produce a different duration risk: the risk of a 10-or-more generation outbreak is an order of magnitude lower at 0.02%.
