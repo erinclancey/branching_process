@@ -2,7 +2,7 @@
 % Please edit documentation in R/pFinalSize.R
 \name{pFinalSize}
 \alias{pFinalSize}
-\title{Probability of outbreak extinction}
+\title{Final outbreak size probability}
 \usage{
 pFinalSize(n, j, R, k)
 }
@@ -15,15 +15,16 @@ pFinalSize(n, j, R, k)
 
 \item{k}{dispersion of negative binomial offspring distribution}
 }
+\value{
+The final size probability
+}
 \description{
-qAny is the probability that n initial cases lead to an extinguished outbreak
-of total size j after any number of transmission generations (j includes the
-n initial cases)
+Final outbreak size probability
 }
 \examples{
 # With 5 initial individuals and negative binomial offspring distribution with mean R=0.2
 # and dispersion k=0.1, gives the probability of outbreak extinction with a total number
-# final outbreak size of exactly 5 to 20 inidividuals (including the initial 5).
+# final outbreak size of exactly 5 to 20 individuals (including the initial 5).
 pFinalSize(5, 5:20, R=0.2, k=0.1)
 
 }
