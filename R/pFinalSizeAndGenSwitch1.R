@@ -8,6 +8,7 @@
 #' @param Rc mean of negative binomial offspring distribution from generation two on
 #' @param kc dispersion of negative binomial offspring distribution from generation two on
 #' @author Damon Toth
+#' @returns The joint probability of outbreak final size and number of transmission generations
 #' @export
 pFinalSizeAndGenSwitch1 <- function(g,n,j,R0,k0,Rc,kc){
   

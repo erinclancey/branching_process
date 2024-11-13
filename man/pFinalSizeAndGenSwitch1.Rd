@@ -21,6 +21,9 @@ pFinalSizeAndGenSwitch1(g, n, j, R0, k0, Rc, kc)
 
 \item{kc}{dispersion of negative binomial offspring distribution from generation two on}
 }
+\value{
+The joint probability of outbreak final size and number of transmission generations
+}
 \description{
 Joint probability of outbreak final size and number of transmission generations
 }
