@@ -10,6 +10,7 @@
 #' @param k0 dispersion of negative binomial offspring distribution from generation one
 #' @param Rc mean of negative binomial offspring distribution from generation two on
 #' @param kc dispersion of negative binomial offspring distribution from generation two on
+#' @returns The probability of the final outbreak size
 #' @examples
 #' pFinalSizeSwitch1(5, 5:20, R0=2, k0=0.1, Rc=0.2, kc=0.1)
 #'

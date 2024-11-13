@@ -19,6 +19,9 @@ pFinalSizeSwitch1(n, j, R0, k0, Rc, kc)
 
 \item{kc}{dispersion of negative binomial offspring distribution from generation two on}
 }
+\value{
+The probability of the final outbreak size
+}
 \description{
 pFinalSizeSwitch1 is the probability that n initial cases lead to an extinguished
 outbreak of total size j after any number of transmission generations (j includes
