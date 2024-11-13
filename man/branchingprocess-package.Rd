@@ -4,13 +4,14 @@
 \name{branchingprocess-package}
 \alias{branchingprocess}
 \alias{branchingprocess-package}
-\title{Infectious disease outbreak quantification using branching processes}
+\title{Infectious disease outbreak quantification using a branching process model
+with negative binomial offspring distribution}
 \description{
 This package provides functions that quantify infectious disease outbreaks
 using a branching process, a stochastic process in which each individual in
 generation n produces a random number of individuals in generation n+1,
 continuing for some number of generations or until there are no individuals
-remaining (stochastic extinction).
+remaining.
 }
 \details{
 The random number of next-generation individuals produced by each individual

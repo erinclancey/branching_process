@@ -11,6 +11,9 @@ pExtinct(R, k)
 
 \item{k}{dispersion parameter of negative binomial offspring distribution}
 }
+\value{
+The probability of outbreak extinction
+}
 \description{
 Probability that one initial case leads to an outbreak that eventually dies out (stochastic extinction)
 }
