@@ -3,8 +3,9 @@
 #' @param g number of generations.
 #' @param n number of initial cases
 #' @param j final size
-#' @param R reproduction number.
-#' @param k dispersion parameter.
+#' @param R reproduction number
+#' @param k dispersion parameter
+#' @returns The joint probability of the final outbreak size and number of transmission generations
 #' @author Damon Toth
 #' @export
 pFinalSizeAndGen <- function(g,n,j,R,k){

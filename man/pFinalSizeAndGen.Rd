@@ -13,9 +13,12 @@ pFinalSizeAndGen(g, n, j, R, k)
 
 \item{j}{final size}
 
-\item{R}{reproduction number.}
+\item{R}{reproduction number}
 
-\item{k}{dispersion parameter.}
+\item{k}{dispersion parameter}
+}
+\value{
+The joint probability of the final outbreak size and number of transmission generations
 }
 \description{
 Joint probability of outbreak final size and number of transmission generations
