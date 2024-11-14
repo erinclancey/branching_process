@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 ## Introduction
 
-This is a vignette to demonstrate potential use of functions in the R package `branchingprocess` to quantify outbreak risk posed by an infectious disease with emerging transmission potential.
+This vignette provides a demonstration of the functions available in the R package `branchingprocess`. This package quantifies outbreak risk posed by an infectious disease with emerging transmission potential.
 
 Some emerging infectious organisms have the ability to transmit from person to person, but the risk of the organism causing an outbreak that infects many individuals over multiple generations of transmission is unclear. Perhaps a pathogen exists primarily in non-human animal reservoirs but occasionally spills over to humans, and those humans may or may not transmit to one or two family members. Sometimes, a spillover event leads to an outbreak infecting dozens of people over a few generations of transmission before fizzling out.
 
